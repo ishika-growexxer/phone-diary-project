@@ -1,0 +1,55 @@
+<!-- contacts.component.html -->
+<div>
+  <h2>Contacts</h2>
+  <table>
+    <tr>
+      <th>Index</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Gender</th>
+      <th>Birth Date</th>
+      <th>Age</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let contact of contacts; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ contact.name | uppercase }}</td>
+      <td>
+        <ng-container *ngIf="!isEditingContact(i); else editModePhone">
+          {{ contact.phone }}
+        </ng-container>
+        <ng-template #editModePhone>
+          <input [(ngModel)]="editedPhone" />
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!isEditingContact(i); else editModeEmail">
+          {{ contact.email }}
+        </ng-container>
+        <ng-template #editModeEmail>
+          <input [(ngModel)]="editedEmail" />
+        </ng-template>
+      </td>
+      <td appGenderStyle [gender]="contact.gender">{{ contact.gender }}</td>
+      <td>{{ contact.birthDate | date:'dd MMM yyyy' }}</td>
+      <td>{{ contact.birthDate | age }}</td>
+      <td>
+        <ng-container *ngIf="!isEditingContact(i); else updateMode">
+          <button (click)="editContact(i)">Edit</button>
+        </ng-container>
+        <ng-template #updateMode>
+          <button (click)="updateContact(i)">Update</button>
+          <button (click)="cancelEdit(i)">Cancel</button>
+        </ng-template>
+        <button (click)="deleteContact(i)">Delete</button>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="8" style="text-align: center;">
+        <button (click)="logout()">Logout</button>
+      </td>
+    </tr>
+  </table>
+</div>
